@@ -9,6 +9,7 @@ export default function MyPicker({
   iconname = 'options',
   onValueChange,
   onChangeText,
+  textColor = colors.white,
   value,
   keyboardType,
   secureTextEntry,
@@ -24,7 +25,7 @@ export default function MyPicker({
       <Text
         style={{
           fontFamily: fonts.primary[700],
-          color: colors.white,
+          color: textColor,
           marginBottom: 8,
           fontSize: 17,
 
@@ -48,6 +49,7 @@ export default function MyPicker({
         </View>
         <Picker style={{ width: '90%', height: 50, left: 30, top: -3, transform: [{ scale: 1 }] }}
           selectedValue={value} onValueChange={onValueChange}>
+          <Picker.Item textStyle={{ fontSize: 12, ...fonts.body2, color: colors.primary, }} value="" label={label} />
           {data.map(item => {
             return <Picker.Item textStyle={{ fontSize: 12, ...fonts.body2, color: colors.primary, }} value={item.value} label={item.label} />;
           })}

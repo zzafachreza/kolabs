@@ -27,6 +27,7 @@ import KebersihanKamarAdd from './Santri/KebersihanKamarAdd';
 import KebersihanKamarDetail from './Santri/KebersihanKamarDetail';
 import KebersihanPribadi from './Santri/KebersihanPribadi';
 import KebersihanPribadiAdd from './Santri/KebersihanPribadiAdd';
+import SakitAdd from './Santri/SakitAdd';
 
 
 
@@ -36,7 +37,7 @@ export {
   HasilScreening2,
   ScreeningDetail2,
   ScreeningDetail,
-
+  SakitAdd,
   Kamar,
   KamarDetail,
   KebersihanKamar,

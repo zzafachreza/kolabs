@@ -21,7 +21,7 @@ export default function MyInput({
   onChangeText,
   value,
   borderWidth = 1,
-  textColor = colors.black,
+  textColor = colors.white,
   keyboardType,
   secureTextEntry,
   styleInput,
@@ -39,7 +39,7 @@ export default function MyInput({
     <View style={{}}>
       <Text style={{
         fontFamily: fonts.primary[700],
-        color: colors.white,
+        color: textColor,
         marginBottom: 8,
         fontSize: 17,
       }}>{label}</Text>
@@ -47,7 +47,8 @@ export default function MyInput({
         height: 45,
         flexDirection: 'row', // Gunakan row agar TextInput dan label bisa sejajar
         alignItems: 'center', // Align center agar teks sejajar vertikal
-
+        borderColor: borderColor,
+        borderWidth: 1,
         borderRadius: 10,
         backgroundColor: 'white',
       }}>

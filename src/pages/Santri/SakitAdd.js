@@ -50,20 +50,14 @@ export default function SakitAdd({ navigation, route }) {
 
     useEffect(() => {
         __getTransaction();
-    }, []);
-
-    const [soal, setSoal] = useState([
-        {
-            soal: 'Kondisi Lantai'
-        }
-    ])
+    }, [])
 
     return (
         <SafeAreaView style={{
             flex: 1,
             backgroundColor: colors.white
         }}>
-            <MyHeader title="Tambah Kebersihan Kamar" />
+            <MyHeader title="Tambah Data Sakit" />
             <ScrollView style={{
                 padding: 12,
             }}>
@@ -72,7 +66,15 @@ export default function SakitAdd({ navigation, route }) {
                     tanggal: x
                 })} textColor={colors.primary} />
                 <MyGap jarak={20} />
-
+                <MyPicker label="Pilih Santri" data={santri} onValueChange={x => setKirim({
+                    ...kirim,
+                    fid_santri: x
+                })} textColor={colors.primary} />
+                <MyGap jarak={20} />
+                <MyInput label="Keterangan" value={kirim.keterangan} onChangeText={x => setKirim({
+                    ...kirim,
+                    keterangan: x
+                })} textColor={colors.primary} />
                 <MyGap jarak={20} />
                 <MyButton title="Tambah" onPress={sendServer} />
             </ScrollView>

@@ -20,7 +20,7 @@ export default function MyCalendar({
   placeholder,
   label2,
   iconColor = colors.black,
-  textColor = colors.black,
+  textColor = colors.white,
   styleLabel,
   colorIcon = colors.primary,
   data = [],
@@ -35,7 +35,7 @@ export default function MyCalendar({
       <Text
         style={{
           fontFamily: fonts.primary[700],
-          color: colors.white,
+          color: textColor,
           marginBottom: 10,
           fontSize: 17
         }}>

@@ -6,7 +6,7 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import axios from 'axios';
 import { apiURL } from '../../utils/localStorage';
 import moment from 'moment';
-import { MyHeader } from '../../components';
+import { MyButton, MyHeader } from '../../components';
 import { useIsFocused } from '@react-navigation/native';
 
 export default function KamarDetail({ navigation, route }) {
@@ -108,8 +108,21 @@ export default function KamarDetail({ navigation, route }) {
                     }}>
                         <Icon type='ionicon' name='bed' color={colors.white} />
                     </View>
+
+
+
                 </View>
+                <Text style={{
+                    ...fonts.headline4,
+                    color: colors.primary,
+                    textAlign: 'center'
+                }}>Data Rekap Harian</Text>
             </ScrollView>
+            <View style={{
+                padding: 10,
+            }}>
+                <MyButton title="Tambah" onPress={() => navigation.navigate('KebersihanKamar', item)} />
+            </View>
         </SafeAreaView>
     )
 }
