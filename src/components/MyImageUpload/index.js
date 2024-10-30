@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, PermissionsAndroid } from 'react-native';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { Color, colors, fonts } from '../../utils';
 
-export default function MyImageUpload() {
+export default function MyImageUpload({ label, onFileChange }) {
   const [imageUri, setImageUri] = useState(null);
 
   const selectImage = () => {
@@ -15,7 +15,31 @@ export default function MyImageUpload() {
     });
   };
 
-  
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+
 
   // Function to handle capturing an image using the camera
   const takePhoto = () => {
@@ -24,34 +48,44 @@ export default function MyImageUpload() {
       quality: 1,
       includeBase64: true, // Include Base64 encoding for better handling of the image
     };
-    launchCamera(options, (response) => {
+    launchCamera({
+      ...options,
+      includeBase64: true,
+      maxWidth: 500,
+      maxHeight: 500,
+    }, (response) => {
+
       if (response.didCancel) {
         console.log('User cancelled camera');
       } else if (response.errorMessage) {
         console.log('Camera Error: ', response.errorMessage);
       } else if (response.assets && response.assets.length > 0) {
         const capturedImage = response.assets[0];
+        onFileChange(`data:${capturedImage.type};base64,${capturedImage.base64}`)
         setImageUri(`data:${capturedImage.type};base64,${capturedImage.base64}`);
       }
     });
   };
 
+  useEffect(() => {
+    requestCameraPermission();
+  }, [])
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Upload Desain</Text>
+      <Text style={styles.title}>{label}</Text>
 
       {/* Display the selected or captured image */}
       {imageUri && (
-      <View style={{alignItems: 'center'}}>
-      <Image
-          source={{ uri: imageUri }}
-          style={styles.image}
-        />
-      </View>
+        <View style={{ alignItems: 'center' }}>
+          <Image
+            source={{ uri: imageUri }}
+            style={styles.image}
+          />
+        </View>
       )}
 
-      <View style={{padding:10,  borderRadius:10, borderColor:Color.blueGray[300], borderWidth:1}}>
-      <TouchableOpacity style={styles.button} onPress={selectImage}>
+      <View style={{ padding: 10, borderRadius: 10, borderColor: Color.blueGray[300], borderWidth: 1 }}>
+        <TouchableOpacity style={styles.button} onPress={takePhoto}>
           <Text style={styles.buttonText}>Upload File</Text>
         </TouchableOpacity>
       </View>
@@ -61,22 +95,22 @@ export default function MyImageUpload() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop:20,
-   
-   
+    marginTop: 20,
+
+
   },
   title: {
     fontSize: 15,
     marginBottom: 10,
     color: colors.primary,
-    fontFamily:fonts.primary[400]
+    fontFamily: fonts.primary[400]
   },
   image: {
     width: 200,
     height: 200,
     borderRadius: 10,
     marginBottom: 20,
-    alignItems:'center'
+    alignItems: 'center'
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -91,6 +125,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    textAlign:"center"
+    textAlign: "center"
   },
 });

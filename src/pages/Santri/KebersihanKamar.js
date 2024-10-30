@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Color, MyDimensi, POSTDataByTable, colors, fonts, getDataByTable, windowHeight, windowWidth } from '../../utils'
 import { Icon } from 'react-native-elements';
@@ -14,6 +14,8 @@ export default function KebersihanKamar({ navigation, route }) {
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(false);
     const [sakit, setSakit] = useState([]);
+    const [kebersihan, setKebersihan] = useState([]);
+    const [pribadi, setPribadi] = useState([]);
     const [kirim, setKirim] = useState({
         fid_kamar: item.id_kamar,
         tanggal: moment().format('YYYY-MM-DD')
@@ -25,13 +27,26 @@ export default function KebersihanKamar({ navigation, route }) {
         // setLoading(true);
 
         getDataByTable('kamar_santri').then(res => {
-            console.log(res.data);
+
             setData(res.data)
         });
 
         POSTDataByTable('get_sakit', kirim).then(res => {
-            console.log(res.data);
+
             setSakit(res.data);
+
+        })
+
+        POSTDataByTable('get_kebersihan', kirim).then(res => {
+
+            setKebersihan(res.data)
+
+        })
+
+
+        POSTDataByTable('get_pribadi', kirim).then(res => {
+
+            setPribadi(res.data)
 
         })
 
@@ -154,143 +169,234 @@ export default function KebersihanKamar({ navigation, route }) {
 
                     <MyCalendar onDateChange={x => setKirim({ ...kirim, tanggal: x })} value={kirim.tanggal} textColor={colors.primary} label="Tanggal" />
                     <MyGap jarak={20} />
-                    <View style={{
-                        borderWidth: 1,
-                        borderColor: colors.primary,
-                        marginBottom: 10,
-                    }}>
+                    <ScrollView>
                         <View style={{
-                            flexDirection: 'row',
-                            backgroundColor: colors.primary,
-                            alignItems: 'center',
-                            paddingVertical: 8,
-                            paddingLeft: 5,
+                            borderWidth: 1,
+                            borderColor: colors.primary,
+                            marginBottom: 10,
                         }}>
-                            <Icon type='ionicon' name='bed-outline' size={20} color={colors.white} />
-                            <Text style={{
-
-                                ...fonts.headline4,
-                                color: colors.white,
-                                flex: 1,
-                                padding: 10,
-                            }}>Kebersihan Kamar</Text>
-
-                            <TouchableOpacity onPress={() => navigation.navigate('KebersihanKamarAdd', item)} style={{
-                                marginRight: 5,
-                                backgroundColor: colors.white,
-                                width: 80,
-                                height: 40,
-                                borderRadius: 20,
-                                justifyContent: "center"
+                            <View style={{
+                                flexDirection: 'row',
+                                backgroundColor: colors.primary,
+                                alignItems: 'center',
+                                paddingVertical: 8,
+                                paddingLeft: 5,
                             }}>
-                                <Icon type='ionicon' name='add' color={colors.primary} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{
-                            padding: 10,
-                        }}>
+                                <Icon type='ionicon' name='bed-outline' size={20} color={colors.white} />
+                                <Text style={{
 
-                        </View>
+                                    ...fonts.headline4,
+                                    color: colors.white,
+                                    flex: 1,
+                                    padding: 10,
+                                }}>Kebersihan Kamar</Text>
 
-                    </View>
-
-
-                    <View style={{
-                        borderWidth: 1,
-                        borderColor: colors.primary,
-                        marginBottom: 10,
-                    }}>
-                        <View style={{
-                            flexDirection: 'row',
-                            backgroundColor: colors.primary,
-                            alignItems: 'center',
-                            paddingVertical: 8,
-                            paddingLeft: 5,
-                        }}>
-                            <Icon type='ionicon' name='person-outline' size={20} color={colors.white} />
-                            <Text style={{
-
-                                ...fonts.headline4,
-                                color: colors.white,
-                                flex: 1,
+                                <TouchableOpacity onPress={() => navigation.navigate('KebersihanKamarAdd', item)} style={{
+                                    marginRight: 5,
+                                    backgroundColor: colors.white,
+                                    width: 80,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    justifyContent: "center"
+                                }}>
+                                    <Icon type='ionicon' name='add' color={colors.primary} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{
                                 padding: 10,
-                            }}>Kebersihan Pribadi</Text>
-
-                            <TouchableOpacity style={{
-                                marginRight: 5,
-                                backgroundColor: colors.white,
-                                width: 80,
-                                height: 40,
-                                borderRadius: 20,
-                                justifyContent: "center"
                             }}>
-                                <Icon type='ionicon' name='add' color={colors.primary} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{
-                            padding: 10,
-                        }}>
+                                <FlatList data={kebersihan} renderItem={({ item, index }) => {
+                                    return (
+                                        <View style={{
+                                            marginBottom: 10,
+                                            borderWidth: 1,
+                                            padding: 10,
+                                            borderRadius: 10,
+                                            borderColor: Color.blueGray[300],
+                                        }}>
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                            }}>
+                                                <Text style={{
+                                                    flex: 1,
+                                                    ...fonts.body3
+                                                }}>Kondisi Lantai</Text>
+                                                <Text style={{
+                                                    ...fonts.headline5
+                                                }}>{item.h1}</Text>
+                                            </View>
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                            }}>
+                                                <Text style={{
+                                                    flex: 1,
+                                                    ...fonts.body3
+                                                }}>Kondisi Kamar Mandi</Text>
+                                                <Text style={{
+                                                    ...fonts.headline5
+                                                }}>{item.h2}</Text>
+                                            </View>
+
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                            }}>
+                                                <Text style={{
+                                                    flex: 1,
+                                                    ...fonts.body3
+                                                }}>Kondisi Lemari</Text>
+                                                <Text style={{
+                                                    ...fonts.headline5
+                                                }}>{item.h3}</Text>
+                                            </View>
+
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                            }}>
+                                                <Text style={{
+                                                    flex: 1,
+                                                    ...fonts.body3
+                                                }}>Gantungan Baju</Text>
+                                                <Text style={{
+                                                    ...fonts.headline5
+                                                }}>{item.h4}</Text>
+                                            </View>
+
+                                        </View>
+                                    )
+                                }} />
+                            </View>
 
                         </View>
 
-                    </View>
 
-                    <View style={{
-                        borderWidth: 1,
-                        borderColor: colors.primary,
-                        marginBottom: 10,
-                    }}>
                         <View style={{
-                            flexDirection: 'row',
-                            backgroundColor: colors.primary,
-                            alignItems: 'center',
-                            paddingVertical: 8,
-                            paddingLeft: 5,
+                            borderWidth: 1,
+                            borderColor: colors.primary,
+                            marginBottom: 10,
                         }}>
-                            <Icon type='ionicon' name='medkit-outline' size={20} color={colors.white} />
-                            <Text style={{
+                            <View style={{
+                                flexDirection: 'row',
+                                backgroundColor: colors.primary,
+                                alignItems: 'center',
+                                paddingVertical: 8,
+                                paddingLeft: 5,
+                            }}>
+                                <Icon type='ionicon' name='person-outline' size={20} color={colors.white} />
+                                <Text style={{
 
-                                ...fonts.headline4,
-                                color: colors.white,
-                                flex: 1,
+                                    ...fonts.headline4,
+                                    color: colors.white,
+                                    flex: 1,
+                                    padding: 10,
+                                }}>Kebersihan Pribadi</Text>
+
+                                <TouchableOpacity onPress={() => navigation.navigate('KebersihanPribadiAdd', item)} style={{
+                                    marginRight: 5,
+                                    backgroundColor: colors.white,
+                                    width: 80,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    justifyContent: "center"
+                                }}>
+                                    <Icon type='ionicon' name='add' color={colors.primary} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{
                                 padding: 10,
-                            }}>Sakit</Text>
-
-                            <TouchableOpacity onPress={() => navigation.navigate('SakitAdd', item)} style={{
-                                marginRight: 5,
-                                backgroundColor: colors.white,
-                                width: 80,
-                                height: 40,
-                                borderRadius: 20,
-                                justifyContent: "center"
                             }}>
-                                <Icon type='ionicon' name='add' color={colors.primary} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{
-                            padding: 10,
-                        }}>
-                            <FlatList data={sakit} renderItem={({ item, index }) => {
-                                return (
-                                    <View style={{
-                                        marginBottom: 10,
-                                        borderWidth: 1,
-                                        padding: 10,
-                                        borderRadius: 10,
-                                        borderColor: Color.blueGray[300],
-                                    }}>
-                                        <Text style={{
-                                            ...fonts.subheadline3,
-                                        }}>{item.nama_santri}</Text>
-                                        <Text style={{
-                                            ...fonts.body3,
-                                        }}>{item.keterangan}</Text>
-                                    </View>
-                                )
-                            }} />
+                                <FlatList data={pribadi} renderItem={({ item, index }) => {
+                                    return (
+                                        <TouchableWithoutFeedback onPress={() => navigation.navigate('KebersihanPribadi', item)}>
+                                            <View style={{
+                                                marginBottom: 10,
+                                                borderWidth: 1,
+                                                padding: 10,
+                                                borderRadius: 10,
+                                                borderColor: Color.blueGray[300],
+                                            }}>
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <Text style={{
+                                                        flex: 1,
+                                                        ...fonts.body3
+                                                    }}>Nama Santri</Text>
+                                                    <Text style={{
+                                                        ...fonts.headline5
+                                                    }}>{item.nama_santri}</Text>
+                                                </View>
+
+
+                                            </View>
+                                        </TouchableWithoutFeedback>
+                                    )
+                                }} />
+                            </View>
+
                         </View>
 
-                    </View>
+                        <View style={{
+                            borderWidth: 1,
+                            borderColor: colors.primary,
+                            marginBottom: 10,
+                        }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                backgroundColor: colors.primary,
+                                alignItems: 'center',
+                                paddingVertical: 8,
+                                paddingLeft: 5,
+                            }}>
+                                <Icon type='ionicon' name='medkit-outline' size={20} color={colors.white} />
+                                <Text style={{
+
+                                    ...fonts.headline4,
+                                    color: colors.white,
+                                    flex: 1,
+                                    padding: 10,
+                                }}>Sakit</Text>
+
+                                <TouchableOpacity onPress={() => navigation.navigate('SakitAdd', item)} style={{
+                                    marginRight: 5,
+                                    backgroundColor: colors.white,
+                                    width: 80,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    justifyContent: "center"
+                                }}>
+                                    <Icon type='ionicon' name='add' color={colors.primary} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{
+                                padding: 10,
+                            }}>
+                                <FlatList data={sakit} renderItem={({ item, index }) => {
+                                    return (
+                                        <View style={{
+                                            marginBottom: 10,
+                                            borderWidth: 1,
+                                            padding: 10,
+                                            borderRadius: 10,
+                                            borderColor: Color.blueGray[300],
+                                        }}>
+                                            <Text style={{
+                                                ...fonts.subheadline3,
+                                            }}>{item.nama_santri}</Text>
+                                            <Text style={{
+                                                ...fonts.body3,
+                                            }}>{item.keterangan}</Text>
+                                        </View>
+                                    )
+                                }} />
+                            </View>
+
+                        </View>
+                    </ScrollView>
 
 
                 </View>
