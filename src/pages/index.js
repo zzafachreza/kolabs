@@ -28,16 +28,20 @@ import KebersihanKamarDetail from './Santri/KebersihanKamarDetail';
 import KebersihanPribadi from './Santri/KebersihanPribadi';
 import KebersihanPribadiAdd from './Santri/KebersihanPribadiAdd';
 import SakitAdd from './Santri/SakitAdd';
+import KebersihanPribadiEdit from './Santri/KebersihanPribadiEdit';
+import KebersihanKamarEdit from './Santri/KebersihanKamarEdit';
 
 
 
 export {
   Splash,
   Home,
+  KebersihanKamarEdit,
   HasilScreening2,
   ScreeningDetail2,
   ScreeningDetail,
   SakitAdd,
+  KebersihanPribadiEdit,
   Kamar,
   KamarDetail,
   KebersihanKamar,

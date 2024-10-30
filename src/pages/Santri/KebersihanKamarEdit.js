@@ -10,16 +10,16 @@ import { MyButton, MyCalendar, MyFileUploader, MyGap, MyHeader, MyImageUpload, M
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
 
-export default function KebersihanKamarAdd({ navigation, route }) {
-    const item = route.params;
-    console.log(item)
+export default function KebersihanKamarEdit({ navigation, route }) {
+    const ITEM = route.params;
+    console.log(ITEM)
     const [kirim, setKirim] = useState({
-        fid_kamar: item.id_kamar,
-        tanggal: moment().format('YYYY-MM-DD'),
-        foto_ranjang:'https://zavalabs.com/nogambar.jpg',
-        foto_lantai:'https://zavalabs.com/nogambar.jpg',
-        foto_semua:'https://zavalabs.com/nogambar.jpg'
-    })
+        id_kebersihan:ITEM.id_kebersihan,
+        foto_ranjang:ITEM.foto_ranjang,
+        foto_lantai:ITEM.foto_lantai,
+        foto_semua:ITEM.foto_semua,
+    });
+
     const toast = useToast();
     const sendServer = () => {
         console.log(kirim)
@@ -28,7 +28,7 @@ export default function KebersihanKamarAdd({ navigation, route }) {
             toast.show('Mohon isi data terlebiih dahulu!')
         } else {
 
-            POSTDataByTable('insert_kebersihan', {
+            POSTDataByTable('update_kebersihan', {
                 ...kirim,
                 soal: soal
             }).then(res => {
@@ -37,50 +37,37 @@ export default function KebersihanKamarAdd({ navigation, route }) {
                     toast.show(res.data.message, {
                         type: 'success'
                     });
-                    navigation.goBack();
+                    navigation.pop(2);
                 }
             })
         }
     }
-    const [santri, setSantri] = useState([]);
-    const __getTransaction = () => {
-
-        POSTDataByTable('santri', {
-            fid_kamar: item.id_kamar,
-        }).then(res => {
-            console.log(res.data);
-            setSantri(res.data);
-        })
-    }
-
-    useEffect(() => {
-        __getTransaction();
-    }, []);
+ 
 
     const [soal, setSoal] = useState([
         {
             soal: 'Kondisi Lantai',
             pilihan: ['Bersih', 'Berantakan', 'Kotor'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h1,
+            nilai: ITEM.n1,
         },
         {
             soal: 'Kondisi Kamar Mandi',
             pilihan: ['Bersih', 'Berantakan', 'Kotor'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h2,
+            nilai: ITEM.n2,
         },
         {
             soal: 'Kondisi Lemari',
             pilihan: ['Tertata Rapi', 'Berantakan', 'Kotor'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h3,
+            nilai: ITEM.n3,
         },
         {
             soal: 'Gantungan Baju',
             pilihan: ['Tertata Rapi', 'Berantakan', 'Baju atau Handuk Kotor dan Berbau'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h4,
+            nilai: ITEM.n4,
         },
     ])
 
@@ -89,14 +76,15 @@ export default function KebersihanKamarAdd({ navigation, route }) {
             flex: 1,
             backgroundColor: colors.white
         }}>
-            <MyHeader title="Tambah Kebersihan Kamar" />
+            <MyHeader title="Edit Kebersihan Kamar" />
             <ScrollView style={{
                 padding: 12,
             }}>
-                <MyCalendar label="Tanggal" value={kirim.tanggal} onDateChange={x => setKirim({
-                    ...kirim,
-                    tanggal: x
-                })} textColor={colors.primary} />
+                <Text style={{
+                    ...fonts.headline3,
+                    color:colors.black
+                }}>{moment(ITEM.tanggal).format('DD MMMM YYYY')}</Text>
+        
                 <MyGap jarak={20} />
                 <FlatList data={soal} renderItem={({ item, index }) => {
                     return (
@@ -124,28 +112,28 @@ export default function KebersihanKamarAdd({ navigation, route }) {
                         ...fonts.headline3,
                         color: colors.primary,
                     }}>Foto Kondisi Kamar</Text>
-                    <MyImageUpload label="Ranjang" onFileChange={x => {
+                    <MyImageUpload label="Ranjang ( Biarkan Jika tidak diubah )" onFileChange={x => {
                         setKirim({
                             ...kirim,
-                            foto_ranjang: x
+                            newfoto_ranjang: x
                         })
                     }} />
 
-                    <MyImageUpload label="Lantai" onFileChange={x => {
+                    <MyImageUpload label="Lantai ( Biarkan Jika tidak diubah )" onFileChange={x => {
                         setKirim({
                             ...kirim,
-                            foto_lantai: x
+                            newfoto_lantai: x
                         })
                     }} />
 
-                    <MyImageUpload label="Keseluruhan" onFileChange={x => {
+                    <MyImageUpload label="Keseluruhan ( Biarkan Jika tidak diubah )" onFileChange={x => {
                         setKirim({
                             ...kirim,
-                            foto_semua: x
+                            newfoto_semua: x
                         })
                     }} />
                 </View>
-                <MyButton title="Tambah" onPress={sendServer} />
+                <MyButton title="Simpan Perubahan" onPress={sendServer} />
                 <MyGap jarak={20} />
             </ScrollView>
 

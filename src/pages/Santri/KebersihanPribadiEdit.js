@@ -10,75 +10,76 @@ import { MyButton, MyCalendar, MyGap, MyHeader, MyInput, MyPicker, MyRadio } fro
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
 
-export default function KebersihanPribadi({ navigation, route }) {
+export default function KebersihanPribadiEdit({ navigation, route }) {
     const ITEM = route.params;
 
     const [soal, setSoal] = useState([
         {
             soal: 'Kondisi Rambut',
             pilihan: ['Bersih, Pendek, dan Rapi', 'Berminyak atau Panjang ', 'Berminyak dan Ketombe atau Berkutu'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h1,
+            nilai: ITEM.n1,
         },
         {
             soal: 'Kondisi Kuku',
             pilihan: ['Bersih dan Pendek', 'Bersih Tapi Panjang ', 'Panjang dan Hitam'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h2,
+            nilai: ITEM.n2,
         },
         {
             soal: 'Gigi dan Mulut',
             pilihan: ['Bersih', 'Sariawan atau Terdapat Karies', 'Gigi Kotor dan Terdapat Karies'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h3,
+            nilai: ITEM.n3,
         },
         {
             soal: 'Wajah',
             pilihan: ['Bersih', 'Berminyak', 'Berjerawat'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h4,
+            nilai: ITEM.n4,
         },
         {
             soal: 'Kulit Tangan',
             pilihan: ['Bersih', 'Bekas Luka', 'Gudik atau Scabies'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h5,
+            nilai: ITEM.n5,
         },
         {
             soal: 'Kulit Kaki',
             pilihan: ['Bersih', 'Bekas Luka', 'Gudik atau Scabies'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h6,
+            nilai: ITEM.n6,
         },
         {
             soal: 'Pakaian',
             pilihan: ['Bersih dan Rapi', 'Bersih Tidak Rapi', 'Kotor dan Tidak Rapi'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h7,
+            nilai: ITEM.n7,
         },
         {
             soal: 'Ranjang',
             pilihan: ['Bersih dan Rapi', 'Berantakan atau Kotor', 'Berantakan dan Kotor'],
-            dipilih: '',
-            nilai: '',
+            dipilih: ITEM.h8,
+            nilai: ITEM.n8,
         },
     ])
 
 
     const toast = useToast();
     const sendServer = () => {
-        Alert.alert(MYAPP,'Apakah kamu yakin akan hapus ini ?',[
+        Alert.alert(MYAPP,'Apakah kamu yakin akan simpan ini ?',[
             {text:'Tidak'},
             {
                 text:'Ya',
                 onPress:()=>{
                     console.log(ITEM);
-                    POSTDataByTable('hapus_pribadi',{
-                        id_pribadi:ITEM.id_pribadi
+                    POSTDataByTable('update_pribadi',{
+                      id_pribadi:ITEM.id_pribadi,
+                      soal:soal
                     }).then(res=>{
                         if(res.data.status==200){
                             toast.show(res.data.message,{type:'success'});
-                            navigation.goBack();
+                            navigation.pop(2);
                         }
                     })
                 }
@@ -96,7 +97,7 @@ export default function KebersihanPribadi({ navigation, route }) {
             flex: 1,
             backgroundColor: colors.white
         }}>
-            <MyHeader title="Kebersihan Pribadi Detail" />
+            <MyHeader title="Edit Kebersihan Pribadi" />
             <ScrollView style={{
                 padding: 12,
             }}>
@@ -111,45 +112,21 @@ export default function KebersihanPribadi({ navigation, route }) {
                 <MyGap jarak={20} />
                 <FlatList data={soal} renderItem={({ item, index }) => {
                     return (
-                        <View style={{
-                            flexDirection:'row',
-                            alignItems:'center',
-                            borderBottomWidth:1,
-                            borderBottomColor:Color.blueGray[300],
-                            padding:10,
-                        }}>
-                            <Text style={{
-                                ...fonts.subheadline3,
-                                flex:0.7,
-                            }}>{item.soal}</Text>
-                              <Text style={{
-                                ...fonts.subheadline3,
-                                flex:0.05,
-                            }}>:</Text>
-                            <Text style={{
-                                ...fonts.headline5,
-                                flex:1,
-                            }}>{ITEM[`h`+(index+1)]}</Text>
+                        <View>
+                            <MyRadio label={item.soal} options={item.pilihan} value={item.dipilih} onPress={x => {
+                                console.log(x);
+                                let tmp = [...soal];
+                                console.log(item.pilihan.indexOf(x))
+                                tmp[index].dipilih = x;
+                                tmp[index].nilai = item.pilihan.indexOf(x) == 0 ? 100 : item.pilihan.indexOf(x) == 1 ? 50 : 0;
+                                setSoal(tmp)
+
+                            }} />
                         </View>
                     )
                 }} />
                 <MyGap jarak={20} />
-                <View style={{
-                    flexDirection:'row'
-                }}>
-                    <View style={{
-                        flex:1,
-                        paddingRight:10,
-                    }}>
-                        <MyButton Icons='create' onPress={()=>navigation.navigate('KebersihanPribadiEdit',ITEM)} iconColor={colors.white} title="Edit" warna={colors.primary} />
-                    </View>
-                    <View style={{
-                        flex:1,
-                        paddingRight:10,
-                    }}>
-                        <MyButton Icons='trash' iconColor={colors.white} title="Hapus" warna={colors.danger} onPress={sendServer} />
-                    </View>
-                </View>
+                  <MyButton title="Simpan Perubahan" onPress={sendServer} />
                 <MyGap jarak={20} />
             </ScrollView>
 

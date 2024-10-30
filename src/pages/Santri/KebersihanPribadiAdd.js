@@ -111,7 +111,7 @@ export default function KebersihanPribadiAdd({ navigation, route }) {
             flex: 1,
             backgroundColor: colors.white
         }}>
-            <MyHeader title="Tambah Data Sakit" />
+            <MyHeader title="Tambah Kebersihan Pribadi" />
             <ScrollView style={{
                 padding: 12,
             }}>
@@ -141,6 +141,7 @@ export default function KebersihanPribadiAdd({ navigation, route }) {
                 }} />
                 <MyGap jarak={20} />
                 <MyButton title="Tambah" onPress={sendServer} />
+                <MyGap jarak={20} />
             </ScrollView>
 
         </SafeAreaView>

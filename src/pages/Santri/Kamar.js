@@ -1,10 +1,10 @@
 import { ActivityIndicator, FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Color, MyDimensi, colors, fonts, getDataByTable, windowHeight, windowWidth } from '../../utils'
+import { Color, MyDimensi, POSTDataByTable, colors, fonts, getDataByTable, windowHeight, windowWidth } from '../../utils'
 import { Icon } from 'react-native-elements';
 import YoutubePlayer from "react-native-youtube-iframe";
 import axios from 'axios';
-import { apiURL } from '../../utils/localStorage';
+import { apiURL, getData } from '../../utils/localStorage';
 import moment from 'moment';
 import { MyHeader } from '../../components';
 import { useIsFocused } from '@react-navigation/native';
@@ -18,9 +18,14 @@ export default function Kamar({ navigation, route }) {
     const getDataTransaksi = () => {
         // setLoading(true);
 
-        getDataByTable('kamar_santri').then(res => {
-            console.log(res.data);
-            setData(res.data)
+        getData('user').then(u=>{
+            console.log('pengguna',u)
+            POSTDataByTable('kamar_santri',{
+                fid_pengguna:u.id_pengguna,
+            }).then(res => {
+                console.log(res.data);
+                setData(res.data)
+            })
         })
 
     }

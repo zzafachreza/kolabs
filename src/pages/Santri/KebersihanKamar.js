@@ -9,6 +9,7 @@ import moment from 'moment';
 import { MyCalendar, MyGap, MyHeader } from '../../components';
 import { useIsFocused } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
+import { tan } from 'react-native-reanimated';
 export default function KebersihanKamar({ navigation, route }) {
     const item = route.params;
     const [data, setData] = useState({});
@@ -18,33 +19,42 @@ export default function KebersihanKamar({ navigation, route }) {
     const [pribadi, setPribadi] = useState([]);
     const [kirim, setKirim] = useState({
         fid_kamar: item.id_kamar,
-        tanggal: moment().format('YYYY-MM-DD')
+        tanggal: route.params.tanggal
     })
 
     const isFocus = useIsFocused();
 
-    const getDataTransaksi = () => {
+    const getDataTransaksi = (tanggal=kirim.tanggal) => {
         // setLoading(true);
 
         getDataByTable('kamar_santri').then(res => {
-
+          
             setData(res.data)
         });
 
-        POSTDataByTable('get_sakit', kirim).then(res => {
-
+        POSTDataByTable('get_sakit', {
+            ...kirim,
+            tanggal:tanggal
+        }).then(res => {
+            console.log(res.data)
             setSakit(res.data);
 
         })
 
-        POSTDataByTable('get_kebersihan', kirim).then(res => {
+        POSTDataByTable('get_kebersihan', {
+            ...kirim,
+            tanggal:tanggal
+        }).then(res => {
 
             setKebersihan(res.data)
 
         })
 
 
-        POSTDataByTable('get_pribadi', kirim).then(res => {
+        POSTDataByTable('get_pribadi', {
+            ...kirim,
+            tanggal:tanggal
+        }).then(res => {
 
             setPribadi(res.data)
 
@@ -59,100 +69,7 @@ export default function KebersihanKamar({ navigation, route }) {
         }
     }, [isFocus]);
 
-    const __renderItem = ({ item }) => {
-        return (
-            <TouchableWithoutFeedback onPress={() => {
-                navigation.navigate('KamarDetail', item)
 
-            }}>
-                <View style={{
-                    flex: 1,
-                    borderWidth: 1,
-                    borderColor: colors.primary,
-                    flexDirection: 'row',
-                    position: 'relative',
-                    borderRadius: 10,
-                    // margin: 10,
-                    marginHorizontal: 5,
-                    marginVertical: 10,
-                    overflow: 'hidden'
-                }}>
-
-
-                    <View style={{
-                        flex: 1,
-                        width: '100%',
-                        backgroundColor: colors.white
-                    }}>
-                        <View style={{
-                            padding: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            borderBottomWidth: 1,
-                            borderBottomColor: Color.blueGray[300]
-                        }}>
-                            <Text style={{
-                                flex: 1,
-                                ...fonts.subheadline3,
-                                color: colors.primary
-                            }}>Nama Kelas / Kamar</Text>
-                            <Text style={{
-                                flex: 1,
-                                ...fonts.headline5,
-                                color: colors.primary
-                            }}>{item.nama_kamar}</Text>
-                        </View>
-                        <View style={{
-                            padding: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            borderBottomWidth: 1,
-                            borderBottomColor: Color.blueGray[300]
-                        }}>
-                            <Text style={{
-                                flex: 1,
-                                ...fonts.subheadline3,
-                                color: colors.primary
-                            }}>Nomor Kamar</Text>
-                            <Text style={{
-                                flex: 1,
-                                ...fonts.headline5,
-                                color: colors.primary
-                            }}>{item.nomor_kamar}</Text>
-                        </View>
-                        <View style={{
-                            padding: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center'
-                        }}>
-                            <Text style={{
-                                flex: 1,
-                                ...fonts.subheadline3,
-                                color: colors.primary
-                            }}>Jumlah Santri</Text>
-                            <Text style={{
-                                flex: 1,
-                                ...fonts.headline5,
-                                color: colors.primary
-                            }}>{item.jumlah} Orang</Text>
-                        </View>
-
-                    </View>
-                    <View style={{
-                        padding: 5,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: colors.primary,
-                    }}>
-                        <Icon type='ionicon' name='bed' color={colors.white} />
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
-        )
-    }
-
-    const [key, setKey] = useState('');
-    const [TMP, setTMP] = useState({});
 
     return (
         <SafeAreaView style={{
@@ -167,7 +84,13 @@ export default function KebersihanKamar({ navigation, route }) {
                     padding: 12,
                 }}>
 
-                    <MyCalendar onDateChange={x => setKirim({ ...kirim, tanggal: x })} value={kirim.tanggal} textColor={colors.primary} label="Tanggal" />
+                    <MyCalendar onDateChange={x => {
+                        setKirim({ ...kirim, tanggal: x });
+                  
+                            getDataTransaksi(x)
+                      
+                        console.log(x)
+                    }} value={kirim.tanggal} textColor={colors.primary} label="Tanggal" />
                     <MyGap jarak={20} />
                     <ScrollView>
                         <View style={{
@@ -207,7 +130,8 @@ export default function KebersihanKamar({ navigation, route }) {
                             }}>
                                 <FlatList data={kebersihan} renderItem={({ item, index }) => {
                                     return (
-                                        <View style={{
+                                        <TouchableWithoutFeedback onPress={()=>navigation.navigate('KebersihanKamarDetail',item)}>
+                                            <View style={{
                                             marginBottom: 10,
                                             borderWidth: 1,
                                             padding: 10,
@@ -265,7 +189,98 @@ export default function KebersihanKamar({ navigation, route }) {
                                                 }}>{item.h4}</Text>
                                             </View>
 
+                                            <View style={{
+                                                marginTop:10,
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                            }}>
+                                                <Text style={{
+                                                    flex: 1,
+                                                    ...fonts.headline5,
+                                                    color:colors.primary,
+                                                }}>Foto Kondisi Kamar</Text>
+                                                <Icon type='ionicon' name='images' color={colors.primary} />
+                                            </View>
+
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center'
+                                            }}>
+                                                <View style={{
+                                                    flex:1,
+                                                     justifyContent:'center',
+                                                    alignItems:'center',
+                                                    padding:5,
+                                                }}>
+
+                                                <Image style={{
+                                                    width:windowWidth/4,
+                                                    height:windowWidth/4,
+                                                    borderRadius:10,
+                                                    resizeMode:'contain'
+                                                }} source={{
+                                                    uri:item.foto_ranjang
+                                                }} />
+                                                <Text style={{
+                                                    textAlign:'center',
+                                                    color:Color.blueGray[400],
+                                                    ...fonts.caption,
+                                                    textAlign:'center'
+                                                }}>Ranjang</Text>
+                                                
+                                                </View>
+
+                                                <View style={{
+                                                    flex:1,
+                                                     justifyContent:'center',
+                                                    alignItems:'center',
+                                                    padding:5,
+                                                }}>
+
+                                                <Image style={{
+                                                    width:windowWidth/4,
+                                                    height:windowWidth/4,
+                                                    borderRadius:10,
+                                                    resizeMode:'contain'
+                                                }} source={{
+                                                    uri:item.foto_lantai
+                                                }} />
+                                                <Text style={{
+                                                    textAlign:'center',
+                                                    color:Color.blueGray[400],
+                                                    ...fonts.caption,
+                                                    textAlign:'center'
+                                                }}>Lantai</Text>
+                                                
+                                                </View>
+
+                                                <View style={{
+                                                    flex:1,
+                                                    justifyContent:'center',
+                                                    alignItems:'center',
+                                                    padding:5,
+                                                }}>
+
+                                                <Image style={{
+                                                    width:windowWidth/4,
+                                                    height:windowWidth/4,
+                                                    resizeMode:'contain',
+                                                    borderRadius:10,
+                                                }} source={{
+                                                    uri:item.foto_semua
+                                                }} />
+                                                <Text style={{
+                                                    textAlign:'center',
+                                                    color:Color.blueGray[400],
+                                                    ...fonts.caption,
+                                                    textAlign:'center'
+                                                }}>Keseluruhan</Text>
+                                                
+                                                </View>
+                                            </View>
+
                                         </View>
+                                        </TouchableWithoutFeedback>
                                     )
                                 }} />
                             </View>
@@ -327,8 +342,10 @@ export default function KebersihanKamar({ navigation, route }) {
                                                         ...fonts.body3
                                                     }}>Nama Santri</Text>
                                                     <Text style={{
+                                                        flex:1,
                                                         ...fonts.headline5
                                                     }}>{item.nama_santri}</Text>
+                                                    <Icon type='ionicon' name='arrow-forward-circle-outline' color={colors.primary} />
                                                 </View>
 
 
