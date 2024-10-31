@@ -1,15 +1,16 @@
-import { ActivityIndicator, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
+import { ActivityIndicator, Alert, FlatList, Image, Linking, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Color, MyDimensi, POSTDataByTable, colors, fonts, getDataByTable, windowHeight, windowWidth } from '../../utils'
 import { Icon } from 'react-native-elements';
 import YoutubePlayer from "react-native-youtube-iframe";
 import axios from 'axios';
-import { apiURL } from '../../utils/localStorage';
+import { apiURL, MYAPP } from '../../utils/localStorage';
 import moment from 'moment';
 import { MyCalendar, MyGap, MyHeader } from '../../components';
 import { useIsFocused } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
 import { tan } from 'react-native-reanimated';
+import { useToast } from 'react-native-toast-notifications';
 export default function KebersihanKamar({ navigation, route }) {
     const item = route.params;
     const [data, setData] = useState({});
@@ -23,6 +24,7 @@ export default function KebersihanKamar({ navigation, route }) {
     })
 
     const isFocus = useIsFocused();
+    const toast = useToast();
 
     const getDataTransaksi = (tanggal=kirim.tanggal) => {
         // setLoading(true);
@@ -400,13 +402,40 @@ export default function KebersihanKamar({ navigation, route }) {
                                             padding: 10,
                                             borderRadius: 10,
                                             borderColor: Color.blueGray[300],
+                                            flexDirection:'row',
+                                            alignItems:'center'
                                         }}>
-                                            <Text style={{
+                                           <View style={{
+                                            flex:1,
+                                           }}>
+                                           <Text style={{
                                                 ...fonts.subheadline3,
                                             }}>{item.nama_santri}</Text>
                                             <Text style={{
+                                               
                                                 ...fonts.body3,
                                             }}>{item.keterangan}</Text>
+                                           </View>
+                                             <TouchableOpacity onPress={()=>Alert.alert(MYAPP,'Apakah kamu yakin akan hapus ini ?',[
+            {text:'Tidak'},
+            {
+                text:'Ya',
+                onPress:()=>{
+                    console.log(item);
+                    POSTDataByTable('hapus_sakit',{
+                        id_sakit:item.id_sakit
+                    }).then(res=>{
+                        if(res.data.status==200){
+                            toast.show(res.data.message,{type:'success'});
+                            getDataTransaksi();
+                        }
+                    })
+                }
+            }
+        ])}>
+                                                <Icon type='ionicon' name='trash' color={colors.danger} />
+                                            </TouchableOpacity>
+
                                         </View>
                                     )
                                 }} />
