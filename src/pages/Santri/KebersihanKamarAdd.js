@@ -15,10 +15,10 @@ export default function KebersihanKamarAdd({ navigation, route }) {
     console.log(item)
     const [kirim, setKirim] = useState({
         fid_kamar: item.id_kamar,
-        tanggal: moment().format('YYYY-MM-DD'),
-        foto_ranjang:'https://zavalabs.com/nogambar.jpg',
-        foto_lantai:'https://zavalabs.com/nogambar.jpg',
-        foto_semua:'https://zavalabs.com/nogambar.jpg'
+        tanggal: item.tanggal,
+        foto_ranjang: 'https://zavalabs.com/nogambar.jpg',
+        foto_lantai: 'https://zavalabs.com/nogambar.jpg',
+        foto_semua: 'https://zavalabs.com/nogambar.jpg'
     })
     const toast = useToast();
     const sendServer = () => {
@@ -93,10 +93,10 @@ export default function KebersihanKamarAdd({ navigation, route }) {
             <ScrollView style={{
                 padding: 12,
             }}>
-                <MyCalendar label="Tanggal" value={kirim.tanggal} onDateChange={x => setKirim({
+                {/* <MyCalendar label="Tanggal" value={kirim.tanggal} onDateChange={x => setKirim({
                     ...kirim,
                     tanggal: x
-                })} textColor={colors.primary} />
+                })} textColor={colors.primary} /> */}
                 <MyGap jarak={20} />
                 <FlatList data={soal} renderItem={({ item, index }) => {
                     return (

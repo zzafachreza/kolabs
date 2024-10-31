@@ -26,17 +26,17 @@ export default function KebersihanKamar({ navigation, route }) {
     const isFocus = useIsFocused();
     const toast = useToast();
 
-    const getDataTransaksi = (tanggal=kirim.tanggal) => {
+    const getDataTransaksi = (tanggal = kirim.tanggal) => {
         // setLoading(true);
 
         getDataByTable('kamar_santri').then(res => {
-          
+
             setData(res.data)
         });
 
         POSTDataByTable('get_sakit', {
             ...kirim,
-            tanggal:tanggal
+            tanggal: tanggal
         }).then(res => {
             console.log(res.data)
             setSakit(res.data);
@@ -45,7 +45,7 @@ export default function KebersihanKamar({ navigation, route }) {
 
         POSTDataByTable('get_kebersihan', {
             ...kirim,
-            tanggal:tanggal
+            tanggal: tanggal
         }).then(res => {
 
             setKebersihan(res.data)
@@ -55,7 +55,7 @@ export default function KebersihanKamar({ navigation, route }) {
 
         POSTDataByTable('get_pribadi', {
             ...kirim,
-            tanggal:tanggal
+            tanggal: tanggal
         }).then(res => {
 
             setPribadi(res.data)
@@ -88,9 +88,9 @@ export default function KebersihanKamar({ navigation, route }) {
 
                     <MyCalendar onDateChange={x => {
                         setKirim({ ...kirim, tanggal: x });
-                  
-                            getDataTransaksi(x)
-                      
+
+                        getDataTransaksi(x)
+
                         console.log(x)
                     }} value={kirim.tanggal} textColor={colors.primary} label="Tanggal" />
                     <MyGap jarak={20} />
@@ -116,7 +116,10 @@ export default function KebersihanKamar({ navigation, route }) {
                                     padding: 10,
                                 }}>Kebersihan Kamar</Text>
 
-                                <TouchableOpacity onPress={() => navigation.navigate('KebersihanKamarAdd', item)} style={{
+                                <TouchableOpacity onPress={() => navigation.navigate('KebersihanKamarAdd', {
+                                    ...item,
+                                    tanggal: kirim.tanggal
+                                })} style={{
                                     marginRight: 5,
                                     backgroundColor: colors.white,
                                     width: 80,
@@ -132,156 +135,156 @@ export default function KebersihanKamar({ navigation, route }) {
                             }}>
                                 <FlatList data={kebersihan} renderItem={({ item, index }) => {
                                     return (
-                                        <TouchableWithoutFeedback onPress={()=>navigation.navigate('KebersihanKamarDetail',item)}>
+                                        <TouchableWithoutFeedback onPress={() => navigation.navigate('KebersihanKamarDetail', item)}>
                                             <View style={{
-                                            marginBottom: 10,
-                                            borderWidth: 1,
-                                            padding: 10,
-                                            borderRadius: 10,
-                                            borderColor: Color.blueGray[300],
-                                        }}>
-                                            <View style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    flex: 1,
-                                                    ...fonts.body3
-                                                }}>Kondisi Lantai</Text>
-                                                <Text style={{
-                                                    ...fonts.headline5
-                                                }}>{item.h1}</Text>
-                                            </View>
-                                            <View style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    flex: 1,
-                                                    ...fonts.body3
-                                                }}>Kondisi Kamar Mandi</Text>
-                                                <Text style={{
-                                                    ...fonts.headline5
-                                                }}>{item.h2}</Text>
-                                            </View>
-
-                                            <View style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    flex: 1,
-                                                    ...fonts.body3
-                                                }}>Kondisi Lemari</Text>
-                                                <Text style={{
-                                                    ...fonts.headline5
-                                                }}>{item.h3}</Text>
-                                            </View>
-
-                                            <View style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    flex: 1,
-                                                    ...fonts.body3
-                                                }}>Gantungan Baju</Text>
-                                                <Text style={{
-                                                    ...fonts.headline5
-                                                }}>{item.h4}</Text>
-                                            </View>
-
-                                            <View style={{
-                                                marginTop:10,
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    flex: 1,
-                                                    ...fonts.headline5,
-                                                    color:colors.primary,
-                                                }}>Foto Kondisi Kamar</Text>
-                                                <Icon type='ionicon' name='images' color={colors.primary} />
-                                            </View>
-
-                                            <View style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center'
+                                                marginBottom: 10,
+                                                borderWidth: 1,
+                                                padding: 10,
+                                                borderRadius: 10,
+                                                borderColor: Color.blueGray[300],
                                             }}>
                                                 <View style={{
-                                                    flex:1,
-                                                     justifyContent:'center',
-                                                    alignItems:'center',
-                                                    padding:5,
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
                                                 }}>
-
-                                                <Image style={{
-                                                    width:windowWidth/4,
-                                                    height:windowWidth/4,
-                                                    borderRadius:10,
-                                                    resizeMode:'contain'
-                                                }} source={{
-                                                    uri:item.foto_ranjang
-                                                }} />
-                                                <Text style={{
-                                                    textAlign:'center',
-                                                    color:Color.blueGray[400],
-                                                    ...fonts.caption,
-                                                    textAlign:'center'
-                                                }}>Ranjang</Text>
-                                                
+                                                    <Text style={{
+                                                        flex: 1,
+                                                        ...fonts.body3
+                                                    }}>Kondisi Lantai</Text>
+                                                    <Text style={{
+                                                        ...fonts.headline5
+                                                    }}>{item.h1}</Text>
+                                                </View>
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <Text style={{
+                                                        flex: 1,
+                                                        ...fonts.body3
+                                                    }}>Kondisi Kamar Mandi</Text>
+                                                    <Text style={{
+                                                        ...fonts.headline5
+                                                    }}>{item.h2}</Text>
                                                 </View>
 
                                                 <View style={{
-                                                    flex:1,
-                                                     justifyContent:'center',
-                                                    alignItems:'center',
-                                                    padding:5,
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
                                                 }}>
-
-                                                <Image style={{
-                                                    width:windowWidth/4,
-                                                    height:windowWidth/4,
-                                                    borderRadius:10,
-                                                    resizeMode:'contain'
-                                                }} source={{
-                                                    uri:item.foto_lantai
-                                                }} />
-                                                <Text style={{
-                                                    textAlign:'center',
-                                                    color:Color.blueGray[400],
-                                                    ...fonts.caption,
-                                                    textAlign:'center'
-                                                }}>Lantai</Text>
-                                                
+                                                    <Text style={{
+                                                        flex: 1,
+                                                        ...fonts.body3
+                                                    }}>Kondisi Lemari</Text>
+                                                    <Text style={{
+                                                        ...fonts.headline5
+                                                    }}>{item.h3}</Text>
                                                 </View>
 
                                                 <View style={{
-                                                    flex:1,
-                                                    justifyContent:'center',
-                                                    alignItems:'center',
-                                                    padding:5,
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
                                                 }}>
-
-                                                <Image style={{
-                                                    width:windowWidth/4,
-                                                    height:windowWidth/4,
-                                                    resizeMode:'contain',
-                                                    borderRadius:10,
-                                                }} source={{
-                                                    uri:item.foto_semua
-                                                }} />
-                                                <Text style={{
-                                                    textAlign:'center',
-                                                    color:Color.blueGray[400],
-                                                    ...fonts.caption,
-                                                    textAlign:'center'
-                                                }}>Keseluruhan</Text>
-                                                
+                                                    <Text style={{
+                                                        flex: 1,
+                                                        ...fonts.body3
+                                                    }}>Gantungan Baju</Text>
+                                                    <Text style={{
+                                                        ...fonts.headline5
+                                                    }}>{item.h4}</Text>
                                                 </View>
-                                            </View>
 
-                                        </View>
+                                                <View style={{
+                                                    marginTop: 10,
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <Text style={{
+                                                        flex: 1,
+                                                        ...fonts.headline5,
+                                                        color: colors.primary,
+                                                    }}>Foto Kondisi Kamar</Text>
+                                                    <Icon type='ionicon' name='images' color={colors.primary} />
+                                                </View>
+
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <View style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        padding: 5,
+                                                    }}>
+
+                                                        <Image style={{
+                                                            width: windowWidth / 4,
+                                                            height: windowWidth / 4,
+                                                            borderRadius: 10,
+                                                            resizeMode: 'contain'
+                                                        }} source={{
+                                                            uri: item.foto_ranjang
+                                                        }} />
+                                                        <Text style={{
+                                                            textAlign: 'center',
+                                                            color: Color.blueGray[400],
+                                                            ...fonts.caption,
+                                                            textAlign: 'center'
+                                                        }}>Ranjang</Text>
+
+                                                    </View>
+
+                                                    <View style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        padding: 5,
+                                                    }}>
+
+                                                        <Image style={{
+                                                            width: windowWidth / 4,
+                                                            height: windowWidth / 4,
+                                                            borderRadius: 10,
+                                                            resizeMode: 'contain'
+                                                        }} source={{
+                                                            uri: item.foto_lantai
+                                                        }} />
+                                                        <Text style={{
+                                                            textAlign: 'center',
+                                                            color: Color.blueGray[400],
+                                                            ...fonts.caption,
+                                                            textAlign: 'center'
+                                                        }}>Lantai</Text>
+
+                                                    </View>
+
+                                                    <View style={{
+                                                        flex: 1,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        padding: 5,
+                                                    }}>
+
+                                                        <Image style={{
+                                                            width: windowWidth / 4,
+                                                            height: windowWidth / 4,
+                                                            resizeMode: 'contain',
+                                                            borderRadius: 10,
+                                                        }} source={{
+                                                            uri: item.foto_semua
+                                                        }} />
+                                                        <Text style={{
+                                                            textAlign: 'center',
+                                                            color: Color.blueGray[400],
+                                                            ...fonts.caption,
+                                                            textAlign: 'center'
+                                                        }}>Keseluruhan</Text>
+
+                                                    </View>
+                                                </View>
+
+                                            </View>
                                         </TouchableWithoutFeedback>
                                     )
                                 }} />
@@ -311,7 +314,10 @@ export default function KebersihanKamar({ navigation, route }) {
                                     padding: 10,
                                 }}>Kebersihan Pribadi</Text>
 
-                                <TouchableOpacity onPress={() => navigation.navigate('KebersihanPribadiAdd', item)} style={{
+                                <TouchableOpacity onPress={() => navigation.navigate('KebersihanPribadiAdd', {
+                                    ...item,
+                                    tanggal: kirim.tanggal
+                                })} style={{
                                     marginRight: 5,
                                     backgroundColor: colors.white,
                                     width: 80,
@@ -344,7 +350,7 @@ export default function KebersihanKamar({ navigation, route }) {
                                                         ...fonts.body3
                                                     }}>Nama Santri</Text>
                                                     <Text style={{
-                                                        flex:1,
+                                                        flex: 1,
                                                         ...fonts.headline5
                                                     }}>{item.nama_santri}</Text>
                                                     <Icon type='ionicon' name='arrow-forward-circle-outline' color={colors.primary} />
@@ -380,7 +386,10 @@ export default function KebersihanKamar({ navigation, route }) {
                                     padding: 10,
                                 }}>Sakit</Text>
 
-                                <TouchableOpacity onPress={() => navigation.navigate('SakitAdd', item)} style={{
+                                <TouchableOpacity onPress={() => navigation.navigate('SakitAdd', {
+                                    ...item,
+                                    tanggal: kirim.tanggal
+                                })} style={{
                                     marginRight: 5,
                                     backgroundColor: colors.white,
                                     width: 80,
@@ -402,37 +411,37 @@ export default function KebersihanKamar({ navigation, route }) {
                                             padding: 10,
                                             borderRadius: 10,
                                             borderColor: Color.blueGray[300],
-                                            flexDirection:'row',
-                                            alignItems:'center'
+                                            flexDirection: 'row',
+                                            alignItems: 'center'
                                         }}>
-                                           <View style={{
-                                            flex:1,
-                                           }}>
-                                           <Text style={{
-                                                ...fonts.subheadline3,
-                                            }}>{item.nama_santri}</Text>
-                                            <Text style={{
-                                               
-                                                ...fonts.body3,
-                                            }}>{item.keterangan}</Text>
-                                           </View>
-                                             <TouchableOpacity onPress={()=>Alert.alert(MYAPP,'Apakah kamu yakin akan hapus ini ?',[
-            {text:'Tidak'},
-            {
-                text:'Ya',
-                onPress:()=>{
-                    console.log(item);
-                    POSTDataByTable('hapus_sakit',{
-                        id_sakit:item.id_sakit
-                    }).then(res=>{
-                        if(res.data.status==200){
-                            toast.show(res.data.message,{type:'success'});
-                            getDataTransaksi();
-                        }
-                    })
-                }
-            }
-        ])}>
+                                            <View style={{
+                                                flex: 1,
+                                            }}>
+                                                <Text style={{
+                                                    ...fonts.subheadline3,
+                                                }}>{item.nama_santri}</Text>
+                                                <Text style={{
+
+                                                    ...fonts.body3,
+                                                }}>{item.keterangan}</Text>
+                                            </View>
+                                            <TouchableOpacity onPress={() => Alert.alert(MYAPP, 'Apakah kamu yakin akan hapus ini ?', [
+                                                { text: 'Tidak' },
+                                                {
+                                                    text: 'Ya',
+                                                    onPress: () => {
+                                                        console.log(item);
+                                                        POSTDataByTable('hapus_sakit', {
+                                                            id_sakit: item.id_sakit
+                                                        }).then(res => {
+                                                            if (res.data.status == 200) {
+                                                                toast.show(res.data.message, { type: 'success' });
+                                                                getDataTransaksi();
+                                                            }
+                                                        })
+                                                    }
+                                                }
+                                            ])}>
                                                 <Icon type='ionicon' name='trash' color={colors.danger} />
                                             </TouchableOpacity>
 

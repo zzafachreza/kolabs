@@ -10,54 +10,37 @@ import { MyButton, MyCalendar, MyGap, MyHeader, MyInput, MyPicker } from '../../
 import { useIsFocused } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
 
-export default function SakitAdd({ navigation, route }) {
+export default function SantriAdd({ navigation, route }) {
     const item = route.params;
     const [kirim, setKirim] = useState({
-        fid_kamar: item.id_kamar,
-        tanggal: item.tanggal,
-        keterangan: '',
-        fid_santri: ''
+        id_santri: item.id_santri,
+        nama_santri: item.nama_santri,
+
     });
 
     const toast = useToast();
     const sendServer = () => {
         console.log(kirim)
 
-        if (kirim.fid_santri.length == 0) {
-            toast.show('Tidak ada santri yang di pilih !')
-        } else {
-            POSTDataByTable('insert_sakit', kirim).then(res => {
-                console.log(res.data);
-                if (res.data.status == 200) {
-                    toast.show(res.data.message, {
-                        type: 'success'
-                    });
-                    navigation.goBack();
-                }
-            })
-        }
-    }
-    const [santri, setSantri] = useState([]);
-    const __getTransaction = () => {
-
-        POSTDataByTable('santri', {
-            fid_kamar: item.id_kamar,
-        }).then(res => {
+        POSTDataByTable('update_santri', kirim).then(res => {
             console.log(res.data);
-            setSantri(res.data);
+            if (res.data.status == 200) {
+                toast.show(res.data.message, {
+                    type: 'success'
+                });
+                navigation.goBack();
+            }
         })
+
     }
 
-    useEffect(() => {
-        __getTransaction();
-    }, [])
 
     return (
         <SafeAreaView style={{
             flex: 1,
             backgroundColor: colors.white
         }}>
-            <MyHeader title="Tambah Data Sakit" />
+            <MyHeader title="Edit Data Santri" />
             <ScrollView style={{
                 padding: 12,
             }}>
@@ -65,18 +48,14 @@ export default function SakitAdd({ navigation, route }) {
                     ...kirim,
                     tanggal: x
                 })} textColor={colors.primary} /> */}
+
                 <MyGap jarak={20} />
-                <MyPicker label="Pilih Santri" data={santri} onValueChange={x => setKirim({
+                <MyInput label="Nama Santri" value={kirim.nama_santri} onChangeText={x => setKirim({
                     ...kirim,
-                    fid_santri: x
+                    nama_santri: x
                 })} textColor={colors.primary} />
                 <MyGap jarak={20} />
-                <MyInput label="Keterangan" value={kirim.keterangan} onChangeText={x => setKirim({
-                    ...kirim,
-                    keterangan: x
-                })} textColor={colors.primary} />
-                <MyGap jarak={20} />
-                <MyButton title="Tambah" onPress={sendServer} />
+                <MyButton title="Simpan" onPress={sendServer} />
             </ScrollView>
 
         </SafeAreaView>

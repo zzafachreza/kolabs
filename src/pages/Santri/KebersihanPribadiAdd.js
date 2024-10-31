@@ -66,7 +66,7 @@ export default function KebersihanPribadiAdd({ navigation, route }) {
 
     const [kirim, setKirim] = useState({
         fid_kamar: item.id_kamar,
-        tanggal: moment().format('YYYY-MM-DD'),
+        tanggal: item.tanggal,
         soal: soal,
         fid_santri: '',
     });
@@ -115,10 +115,10 @@ export default function KebersihanPribadiAdd({ navigation, route }) {
             <ScrollView style={{
                 padding: 12,
             }}>
-                <MyCalendar label="Tanggal" value={kirim.tanggal} onDateChange={x => setKirim({
+                {/* <MyCalendar label="Tanggal" value={kirim.tanggal} onDateChange={x => setKirim({
                     ...kirim,
                     tanggal: x
-                })} textColor={colors.primary} />
+                })} textColor={colors.primary} /> */}
                 <MyGap jarak={20} />
                 <MyPicker label="Pilih Santri" data={santri} onValueChange={x => setKirim({
                     ...kirim,

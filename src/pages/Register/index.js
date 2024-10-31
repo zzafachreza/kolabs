@@ -111,7 +111,10 @@ export default function Register({ navigation, route }) {
                     toast.show(res.data.message, {
                         type: 'success'
                     });
-                    navigation.goBack();
+
+                    storeData('user', res.data.data)
+
+                    navigation.replace('MainApp');
 
                 }
             }).finally(() => {
@@ -219,13 +222,13 @@ export default function Register({ navigation, route }) {
                                 color: colors.white,
                                 marginBottom: 8,
                                 fontSize: 17,
-                            }}>Pilih Kelas / Kamar</Text>
+                            }}>Pilih Kelas / Kamar {kamar.length}</Text>
 
                             <ScrollView style={{
                                 borderRadius: 10,
                                 backgroundColor: colors.white,
-                                height: 200,
-                                padding: 20,
+                                padding: 10,
+
                             }}>
                                 <FlatList
                                     data={kamar}

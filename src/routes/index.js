@@ -84,6 +84,8 @@ import {
   SakitAdd,
   KebersihanPribadiEdit,
   KebersihanKamarEdit,
+  SantriAdd,
+  SantriList,
 
 
 
@@ -128,6 +130,12 @@ export default function Router() {
         }}
       />
       <Stack.Screen name='KebersihanKamarEdit' component={KebersihanKamarEdit} options={{ headerShown: false }} />
+
+
+      <Stack.Screen name='SantriAdd' component={SantriAdd} options={{ headerShown: false }} />
+
+      <Stack.Screen name='SantriList' component={SantriList} options={{ headerShown: false }} />
+
       <Stack.Screen name='KebersihanPribadiEdit' component={KebersihanPribadiEdit} options={{ headerShown: false }} />
       <Stack.Screen name='SakitAdd' component={SakitAdd} options={{ headerShown: false }} />
       <Stack.Screen name='Kamar' component={Kamar} options={{ headerShown: false }} />

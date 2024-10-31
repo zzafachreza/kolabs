@@ -30,6 +30,8 @@ import KebersihanPribadiAdd from './Santri/KebersihanPribadiAdd';
 import SakitAdd from './Santri/SakitAdd';
 import KebersihanPribadiEdit from './Santri/KebersihanPribadiEdit';
 import KebersihanKamarEdit from './Santri/KebersihanKamarEdit';
+import SantriAdd from './Santri/SantriAdd';
+import SantriList from './Santri/SantriList';
 
 
 
@@ -67,6 +69,8 @@ export {
   IsiScreeningLanjutan,
   HasilScreening,
   Konsultasi,
+  SantriAdd,
+  SantriList
 
 
 };

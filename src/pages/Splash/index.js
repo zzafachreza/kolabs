@@ -73,7 +73,7 @@ export default function Splash({ navigation }) {
           style={{
             transform: [{ scale: img }],
             width: windowWidth,
-            height: windowWidth / 1.4,
+            height: windowWidth * 1.2,
             marginTop: '28%'
 
           }}
