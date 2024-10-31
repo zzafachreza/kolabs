@@ -239,30 +239,12 @@ export default function KamarDetail({ navigation, route }) {
                                             flex: 1,
                                             ...fonts.subheadline3,
                                             color: colors.primary
-                                        }}>Skor Kebersihan Pribadi (Rata-rata)</Text>
+                                        }}>Skor Kebersihan Pribadi</Text>
                                         <Text style={{
                                             // flex: 1,
                                             ...fonts.headline5,
                                             color: colors.black
                                         }}>{item.skor_pribadi}</Text>
-                                    </View>
-                                    <View style={{
-                                        padding: 10,
-                                        flexDirection: 'row',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Icon type='ionicon' name='medkit' size={20} color={colors.secondary} />
-                                        <Text style={{
-                                            left: 5,
-                                            flex: 1,
-                                            ...fonts.subheadline3,
-                                            color: colors.primary
-                                        }}>Jumlah Sakit</Text>
-                                        <Text style={{
-                                            // flex: 1,
-                                            ...fonts.headline5,
-                                            color: colors.black
-                                        }}>{item.jumlah_sakit} Orang</Text>
                                     </View>
                                     <View style={{
                                         padding: 10,
@@ -282,6 +264,25 @@ export default function KamarDetail({ navigation, route }) {
                                             color: colors.black
                                         }}>{item.total}</Text>
                                     </View>
+                                    <View style={{
+                                        padding: 10,
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Icon type='ionicon' name='medkit' size={20} color={colors.secondary} />
+                                        <Text style={{
+                                            left: 5,
+                                            flex: 1,
+                                            ...fonts.subheadline3,
+                                            color: colors.primary
+                                        }}>Jumlah Sakit</Text>
+                                        <Text style={{
+                                            // flex: 1,
+                                            ...fonts.headline5,
+                                            color: colors.black
+                                        }}>{item.jumlah_sakit} Orang</Text>
+                                    </View>
+
 
                                 </View>
 
